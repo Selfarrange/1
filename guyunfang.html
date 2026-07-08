@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 网页标题，可修改为公司名称 -->
+    <title>谷韵坊 · 纯粮自烤酒</title>
+    
+    <style>
+        /* ========== 全局基础样式 ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全局字体与背景色 */
+        body {
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+            background-color: #faf7f2; /* 米白色背景，清新自然 */
+            color: #3d3d3d;
+            line-height: 1.7;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ========== 顶部导航栏 ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(250, 247, 242, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid #e8e2d6;
+        }
+
+        /* Logo 样式 */
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: #5a7247; /* 深绿色，呼应粮食自然感 */
+            letter-spacing: 2px;
+        }
+
+        /* 导航链接 */
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 15px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #8b5a2b; /* 悬停变为棕色 */
+        }
+
+        /* ========== 首屏大图 Banner ========== */
+        .hero {
+            margin-top: 70px;
+            height: 85vh;
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.3)), 
+                        url("C:\www.guyunfang.com\0.jpg") center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero-content h1 {
+            font-size: 52px;
+            font-weight: 300;
+            letter-spacing: 8px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            letter-spacing: 3px;
+            opacity: 0.9;
+        }
+
+        /* ========== 通用区块样式 ========== */
+        .section {
+            padding: 100px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 400;
+            color: #5a7247;
+            margin-bottom: 15px;
+            letter-spacing: 4px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 60px;
+            font-size: 14px;
+            letter-spacing: 2px;
+        }
+
+        /* ========== 公司简介部分 ========== */
+        .about-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-img img {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        .about-text h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #8b5a2b;
+            font-weight: 500;
+        }
+
+        .about-text p {
+            margin-bottom: 18px;
+            color: #555;
+            text-align: justify;
+        }
+
+        /* ========== 产品选项卡区域 ========== */
+        .products-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 选项卡按钮栏 */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            border: 1px solid #d4cbb8;
+            background: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        /* 选项卡激活状态 */
+        .tab-btn.active {
+            background-color: #5a7247;
+            color: #fff;
+            border-color: #5a7247;
+        }
+
+        .tab-btn:hover {
+            border-color: #5a7247;
+            color: #5a7247;
+        }
+
+        .tab-btn.active:hover {
+            color: #fff;
+        }
+
+        /* 选项卡内容容器 */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 产品大图网格布局 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* 单个产品卡片 */
+        .product-card {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        /* 产品大图 */
+        .product-img {
+            width: 100%;
+            height: 320px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-info h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #3d3d3d;
+            font-weight: 500;
+        }
+
+        .product-info .spec {
+            color: #8b5a2b;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .product-info p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* ========== 底部页脚 ========== */
+        footer {
+            background-color: #3d3d3d;
+            color: #aaa;
+            padding: 50px 8%;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .footer-logo {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .footer-contact {
+            margin: 20px 0;
+            line-height: 2;
+        }
+
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #555;
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* ========== 响应式适配（手机端） ========== */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 36px;
+                letter-spacing: 4px;
+            }
+
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .nav-links {
+                display: none; /* 移动端可隐藏导航，如需汉堡菜单可自行扩展 */
+            }
+
+            .section {
+                padding: 60px 6%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========== 顶部导航 ========== -->
+    <nav class="navbar">
+        <!-- 公司Logo，可修改文字 -->
+        <div class="logo">谷韵坊</div>
+        <ul class="nav-links">
+            <li><a href="#home">首页</a></li>
+            <li><a href="#about">关于我们</a></li>
+            <li><a href="#products">产品系列</a></li>
+            <li><a href="#contact">联系我们</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========== 首屏大图 Banner ========== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>纯粮自烤 · 岁月留香</h1>
+            <p>传承古法工艺 · 匠心酿造每一滴</p>
+        </div>
+    </section>
+
+    <!-- ========== 公司简介板块 ========== -->
+    <section class="section" id="about">
+        <h2 class="section-title">关于谷韵坊</h2>
+        <p class="section-subtitle">ABOUT US</p>
+
+        <div class="about-container">
+            <div class="about-img">
+                <!-- 公司介绍配图，可替换图片链接 -->
+                <img src="C:\www.guyunfang.com\1.jpg" alt="酿酒工艺">
+            </div>
+            <div class="about-text">
+                <h3>匠心传承 · 纯粮酿造</h3>
+                <p>谷韵坊坐落于山水秀丽的粮食主产区，依托当地优质的五谷杂粮与山泉水，坚持传统固态发酵工艺，每一滴酒都历经选粮、蒸煮、糖化、发酵、蒸馏、窖藏六道工序，自然老熟，不添加任何香精香料。</p>
+                <p>我们坚持"粮为酒之肉，曲为酒之骨"的古训，选用当年新收的高粱、玉米、小麦、大米、糯米等优质粮食，采用祖传小曲工艺，小锅精烤，量少质优，只为呈现最本真的粮食醇香。</p>
+                <p>三十余年酿酒经验的老师傅全程把控，从粮食到成品，层层把关，确保每一瓶自烤酒都口感醇厚、入口绵柔、饮后不上头，是自饮小酌、馈赠亲友的上佳之选。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 产品展示板块（选项卡模式） ========== -->
+    <section class="section" id="products" style="background-color: #f3efe8;">
+        <h2 class="section-title">产品系列</h2>
+        <p class="section-subtitle">PRODUCT SERIES</p>
+
+        <div class="products-wrapper">
+            <!-- 选项卡按钮 -->
+            <div class="tab-nav">
+                <!-- 每个按钮对应一个分类，data-tab属性与下方内容ID对应 -->
+                <button class="tab-btn active" data-tab="tab1">高粱酒系列</button>
+                <button class="tab-btn" data-tab="tab2">玉米酒系列</button>
+                <button class="tab-btn" data-tab="tab3">五谷杂粮酒</button>
+                <button class="tab-btn" data-tab="tab4">特色花果酒</button>
+            </div>
+
+            <!-- 选项卡1：高粱酒系列 -->
+            <div class="tab-content active" id="tab1">
+                <div class="product-grid">
+                    <!-- 产品卡片1 -->
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\1-1.jpg" alt="红高粱原浆" class="product-img">
+                        <div class="product-info">
+                            <h4>红高粱原浆</h4>
+                            <div class="spec">52度 · 纯高粱固态发酵</div>
+                            <p>精选东北红高粱，小曲固态发酵，清蒸清烧，口感清香纯正，回味甘甜。</p>
+                        </div>
+                    </div>
+                    <!-- 产品卡片2 -->
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\1-2.jpg" alt="三年窖藏高粱" class="product-img">
+                        <div class="product-info">
+                            <h4>三年窖藏高粱酒</h4>
+                            <div class="spec">50度 · 陶坛窖藏三年</div>
+                            <p>新酒入陶坛窖藏三年，自然老熟，酒体微黄绵柔，陈香明显，醇厚饱满。</p>
+                        </div>
+                    </div>
+                    <!-- 产品卡片3 -->
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\1-3.jpg" alt="糯高粱小曲酒" class="product-img">
+                        <div class="product-info">
+                            <h4>糯高粱小曲酒</h4>
+                            <div class="spec">45度 · 传统小锅烤制</div>
+                            <p>本地糯高粱搭配祖传药小曲，小锅蒸馏，口感清雅柔和，好入口不上头。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选项卡2：玉米酒系列 -->
+            <div class="tab-content" id="tab2">
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\2-1.jpg" alt="玉米原浆酒" class="product-img">
+                        <div class="product-info">
+                            <h4>玉米原浆酒</h4>
+                            <div class="spec">50度 · 纯玉米酿造</div>
+                            <p>金黄玉米粒充分发酵，酒体带有独特的玉米甜香，入口绵甜，落口爽净。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\2-2.jpg" alt="老玉米烧酒" class="product-img">
+                        <div class="product-info">
+                            <h4>老玉米烧酒</h4>
+                            <div class="spec">55度 · 传统柴火烤制</div>
+                            <p>柴火土灶慢火蒸馏，酒香浓郁霸道，劲大味足，是老一辈最爱的味道。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\2-3.jpg" alt="玉米陈酿" class="product-img">
+                        <div class="product-info">
+                            <h4>玉米陈酿</h4>
+                            <div class="spec">48度 · 一年陈酿</div>
+                            <p>经过一年自然陈放，辛辣感褪去，口感更加醇和顺滑，日常小酌首选。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选项卡3：五谷杂粮酒 -->
+            <div class="tab-content" id="tab3">
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\3-1.jpg" alt="五粮原浆" class="product-img">
+                        <div class="product-info">
+                            <h4>五粮原浆</h4>
+                            <div class="spec">52度 · 五种粮食配比</div>
+                            <p>高粱、大米、糯米、小麦、玉米五种粮食科学配比酿造，香气层次丰富。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\3-2.jpg" alt="荞麦酒" class="product-img">
+                        <div class="product-info">
+                            <h4>苦荞养生酒</h4>
+                            <div class="spec">42度 · 黑苦荞酿造</div>
+                            <p>精选高原黑苦荞，口感微苦回甘，荞香独特，口感清爽，适合日常饮用。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\3-3.jpg" alt="大麦酒" class="product-img">
+                        <div class="product-info">
+                            <h4>大麦烧酒</h4>
+                            <div class="spec">46度 · 纯大麦酿制</div>
+                            <p>大麦清香突出，口感干爽清冽，麦香浓郁，别有一番风味。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 选项卡4：特色花果酒 -->
+            <div class="tab-content" id="tab4">
+                <div class="product-grid">
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\4-1.jpg" alt="杨梅酒" class="product-img">
+                        <div class="product-info">
+                            <h4>高山杨梅酒</h4>
+                            <div class="spec">28度 · 鲜果浸泡</div>
+                            <p>本地高山杨梅加高粱酒浸泡，酸甜适口，果香浓郁，女士也适宜饮用。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\4-2.jpg" alt="桂花酒" class="product-img">
+                        <div class="product-info">
+                            <h4>金桂陈酿</h4>
+                            <div class="spec">35度 · 鲜桂花入酿</div>
+                            <p>金秋桂花与米酒同酿，桂香清雅，入口绵甜，花香与酒香完美融合。</p>
+                        </div>
+                    </div>
+                    <div class="product-card">
+                        <img src="C:\www.guyunfang.com\4-3.jpg" alt="桑葚酒" class="product-img">
+                        <div class="product-info">
+                            <h4>桑葚果酒</h4>
+                            <div class="spec">30度 · 桑葚发酵</div>
+                            <p>新鲜桑葚发酵酿制，色泽紫红透亮，果香醇厚，口感柔顺，营养丰富。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== 页脚 ========== -->
+    <footer id="contact">
+        <div class="footer-logo">谷韵坊 · 纯粮自烤酒</div>
+        <div class="footer-contact">
+            <p>地址：云南省普洱市镇沅彝族哈尼族拉祜族自治县博物馆背后50米镇峰酒业有限责任公司</p>
+            <p>联系电话：147-6939-3119</p>
+            <p>微信：14769393119</p>
+        </div>
+        <div class="copyright">
+            © 2022 谷韵坊酒业 版权所有 | 纯粮酿造 假一赔十
+        </div>
+    </footer>
+
+    <!-- ========== JavaScript 交互逻辑 ========== -->
+    <script>
+        // 获取所有选项卡按钮和内容
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // 遍历每个按钮，添加点击事件
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 获取当前按钮对应的内容ID
+                const tabId = btn.getAttribute('data-tab');
+                
+                // 1. 移除所有按钮的激活状态
+                tabBtns.forEach(b => b.classList.remove('active'));
+                // 2. 隐藏所有内容面板
+                tabContents.forEach(c => c.classList.remove('active'));
+                
+                // 3. 给当前点击的按钮添加激活状态
+                btn.classList.add('active');
+                // 4. 显示对应的内容面板
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // 平滑滚动效果（点击导航链接时）
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if(target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 70, // 减去导航栏高度
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
